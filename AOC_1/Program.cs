@@ -2,26 +2,45 @@
 {
     class Program
     {
-        //List<int> calories_list = new List<int>();
-        public List<int> elf_nr_one = new List<int> {1000, 2000, 3000};
-        public List<int> elf_nr_two = new List<int> {4000};
-        public  List<int> elf_nr_three = new List<int> {5000, 6000};
-        public List<int> elf_nr_four = new List<int> {7000, 8000, 9000};
-        public List<int> elf_nr_five = new List<int> {10000};
-
-        private int CaloriesSum(List<int> elf_calories)
+        private void ElfCarriedCaloriesCounter()
         {
+            int countElfs = 1;
             int sum = 0;
-            foreach(var cal in elf_calories)
-                sum += cal;
-            return sum;
+            int max = 0;
+            int elfwithmaxcalories = 0;
+  
+            // Read the file and display it line by line.  
+            foreach (string line in File.ReadLines("inputlist.txt"))
+            {  
+                if(line != string.Empty)
+                {
+                    sum += Int32.Parse(line);
+                }
+                else
+                {
+                    if(sum > max)
+                    {
+                        elfwithmaxcalories = countElfs;
+                        max = sum;
+                    }
+                    countElfs++;
+                    sum = 0;
+                }
+                    
+            }  
+            
+            Console.WriteLine("Max calories: {0} by elf number: {1}.", max, elfwithmaxcalories);  
         }
 
         static void Main ()
         {
             Program p = new Program();
-            int sum = p.CaloriesSum(p.elf_nr_two);
-            Console.WriteLine("ElfOne: " + sum);
+            p.ElfCarriedCaloriesCounter();
+            
+            // Suspend the screen.
+            Console.WriteLine("Press any key."); 
+            Console.ReadLine();  
+        
         }
 
     }
