@@ -5,11 +5,12 @@
     */
     class Program
     {
-        private int sum;
+        private int sum, badgessum;
         private void Init()
         {
            Console.WriteLine("*** INIT ***");
            sum = 0;
+           badgessum = 0;
         }
             
         // Part 1
@@ -40,7 +41,53 @@
                 if (ascii >= 65 && ascii <= 90)
                     sum += ((ascii - 65) + 27);
             }
-            Console.WriteLine("Sum: {0}", sum);
+        }
+
+        // Part 2
+        private void RucksackReorganizationFindBadges()
+        {
+            Init();
+            Console.WriteLine("*** Rucksack Reorganisation Badges ***");
+            List<string> LineList = new List<string>();
+            foreach (string line in File.ReadLines("puzzleinput.txt"))
+            {
+                LineList.Add(RemoveDuplicates(line));
+            }
+            
+            int index = 0;
+            while(index < LineList.Count)
+            {
+                string str1 = LineList[index];
+                string str2 = LineList[index + 1];
+                string str3 = LineList[index + 2];
+
+                foreach(var c in str1)
+                {
+                    if(str2.Contains(c))
+                    {
+                        if(str3.Contains(c))
+                        {
+                            int ascii = (int)c;
+                            //Check lower case
+                            if (ascii >= 97 && ascii <= 122)
+                                badgessum += (ascii - 96);
+                            
+                            // Check upper case
+                            if (ascii >= 65 && ascii <= 90)
+                                badgessum += ((ascii - 65) + 27);
+                        }
+                    }
+                }
+
+                // Increase by three to get next three rucksacks 
+                index += 3;
+            }
+
+        }
+
+        private static string RemoveDuplicates(string input)
+        {
+            return new string(input.ToCharArray().Distinct().ToArray());
         }
 
 
@@ -48,6 +95,10 @@
         {
             Program p = new Program();
             p.RucksackReorganization();
+            Console.WriteLine("Sum: {0}", p.sum);
+            
+            p.RucksackReorganizationFindBadges();
+            Console.WriteLine("BadgesSum: {0}", p.badgessum);
         }
     }
 }
