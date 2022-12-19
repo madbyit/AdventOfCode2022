@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Net.Sockets;
-using System.Text;
+﻿using System.Text;
 
 namespace adventofcode
 {
@@ -36,9 +34,49 @@ namespace adventofcode
                 else
                 {
                     int result = index + 4;
-                    Console.WriteLine($"Result index is: {result}");
+                    Console.WriteLine($"Start-of-packet marker index: {result}");
                     break;
                 }
+            }
+        }
+
+        private static void PartTwo()
+        {
+            using FileStream fs = new(ds_buffer, FileMode.Open, FileAccess.Read);
+            using StreamReader sr = new(fs);
+            List<char>? charList = new();
+            HashSet<string> hash = new();
+
+
+            while (!sr.EndOfStream)
+            {
+                char c = (char)sr.Read();
+                charList.Add(c);
+            }
+
+            int index = 0;
+            int result = 0;
+            while (true)
+            {
+                StringBuilder sb = new();
+
+                for(int i = 0; i < 14; i++)
+                {
+                    sb.Append(charList.ElementAt(index + i));
+                }
+
+                var unique = new HashSet<char>(sb.ToString()); // Remove duplicated characters
+
+                if(unique.Count == 14)
+                {
+                    result = index+ 14;
+                    Console.WriteLine($"Start-of-message marker index: {result}");
+                    break;
+                }
+                else
+                {
+                    index++;
+                }               
             }
         }
 
@@ -46,6 +84,8 @@ namespace adventofcode
         {
             Console.WriteLine("Part 1");
             PartOne();
+            Console.WriteLine("Part 2");
+            PartTwo();
         }
     }
 }
